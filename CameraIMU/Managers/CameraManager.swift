@@ -42,8 +42,10 @@ class CameraManager: NSObject, ObservableObject {
 
         let cameras = discoverySession.devices
 
-        // Default to back wide-angle if available
+        // Default to ultra-wide (0.5x) if available, otherwise wide-angle
         let preferredIndex = cameras.firstIndex {
+            $0.deviceType == .builtInUltraWideCamera
+        } ?? cameras.firstIndex {
             $0.deviceType == .builtInWideAngleCamera && $0.position == .back
         } ?? 0
 

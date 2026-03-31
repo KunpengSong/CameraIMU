@@ -4,13 +4,26 @@ import SwiftUI
 struct RecordingsListView: View {
     @ObservedObject var viewModel: RecordingViewModel
     @State private var selectedRecording: Recording?
+    @State private var selectedIDs: Set<UUID> = []
+    @State private var isSelecting = false
+    @State private var showShareSheet = false
+    @State private var showDeleteConfirm = false
     @Environment(\.dismiss) private var dismiss
     @Environment(\.colorScheme) private var colorScheme
+
+    private var allSelected: Bool {
+        !viewModel.recordings.isEmpty && selectedIDs.count == viewModel.recordings.count
+    }
+
+    private var shareURLs: [URL] {
+        viewModel.recordings
+            .filter { selectedIDs.contains($0.id) }
+            .flatMap { [$0.videoURL, $0.csvURL] }
+    }
 
     var body: some View {
         NavigationView {
             ZStack {
-                // Adaptive background
                 Color(.systemGroupedBackground)
                     .ignoresSafeArea()
 
@@ -23,6 +36,16 @@ struct RecordingsListView: View {
             .navigationTitle("Recordings")
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    if !viewModel.recordings.isEmpty {
+                        Button(isSelecting ? "Done" : "Select") {
+                            withAnimation {
+                                isSelecting.toggle()
+                                if !isSelecting { selectedIDs.removeAll() }
+                            }
+                        }
+                    }
+                }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
                         dismiss()
@@ -34,8 +57,34 @@ struct RecordingsListView: View {
                     }
                 }
             }
+            .safeAreaInset(edge: .bottom) {
+                if isSelecting {
+                    selectionToolbar
+                }
+            }
             .sheet(item: $selectedRecording) { recording in
                 VideoPlayerView(url: recording.videoURL)
+            }
+            .sheet(isPresented: $showShareSheet) {
+                ActivityView(activityItems: shareURLs)
+            }
+            .confirmationDialog(
+                "Delete \(selectedIDs.count) recording\(selectedIDs.count == 1 ? "" : "s")?",
+                isPresented: $showDeleteConfirm
+            ) {
+                Button("Delete", role: .destructive) {
+                    withAnimation {
+                        for id in selectedIDs {
+                            if let rec = viewModel.recordings.first(where: { $0.id == id }) {
+                                viewModel.deleteRecording(rec)
+                            }
+                        }
+                        selectedIDs.removeAll()
+                    }
+                }
+                Button("Cancel", role: .cancel) {}
+            } message: {
+                Text("This will permanently delete the selected video and IMU data files.")
             }
         }
     }
@@ -61,19 +110,127 @@ struct RecordingsListView: View {
 
     private var recordingsList: some View {
         ScrollView {
+            // Select All row
+            if isSelecting {
+                Button {
+                    withAnimation {
+                        if allSelected {
+                            selectedIDs.removeAll()
+                        } else {
+                            selectedIDs = Set(viewModel.recordings.map(\.id))
+                        }
+                    }
+                } label: {
+                    HStack(spacing: 10) {
+                        Image(systemName: allSelected ? "checkmark.circle.fill" : "circle")
+                            .font(.system(size: 22))
+                            .foregroundStyle(allSelected ? .blue : .secondary)
+                        Text("Select All")
+                            .font(.system(size: 15, weight: .medium))
+                            .foregroundStyle(.primary)
+                        Spacer()
+                    }
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 10)
+                }
+                .buttonStyle(.plain)
+            }
+
             LazyVStack(spacing: 12) {
                 ForEach(viewModel.recordings) { recording in
-                    RecordingCard(recording: recording) {
-                        selectedRecording = recording
-                    } onDelete: {
-                        withAnimation(.easeInOut(duration: 0.25)) {
-                            viewModel.deleteRecording(recording)
+                    let isSelected = selectedIDs.contains(recording.id)
+
+                    HStack(spacing: 12) {
+                        if isSelecting {
+                            Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
+                                .font(.system(size: 22))
+                                .foregroundStyle(isSelected ? .blue : .secondary)
+                                .transition(.scale.combined(with: .opacity))
+                        }
+
+                        RecordingCard(recording: recording, isSelecting: isSelecting) {
+                            if isSelecting {
+                                toggleSelection(recording.id)
+                            } else {
+                                selectedRecording = recording
+                            }
+                        } onDelete: {
+                            withAnimation(.easeInOut(duration: 0.25)) {
+                                viewModel.deleteRecording(recording)
+                            }
+                        } onShare: {
+                            showShareSheet = false
+                            selectedIDs = [recording.id]
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                showShareSheet = true
+                            }
+                        }
+                    }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        if isSelecting {
+                            toggleSelection(recording.id)
                         }
                     }
                 }
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 8)
+            // Extra space for bottom toolbar
+            if isSelecting {
+                Spacer().frame(height: 70)
+            }
+        }
+        .animation(.easeInOut(duration: 0.2), value: isSelecting)
+    }
+
+    // MARK: - Selection Toolbar
+
+    private var selectionToolbar: some View {
+        HStack(spacing: 0) {
+            Button {
+                guard !selectedIDs.isEmpty else { return }
+                showShareSheet = true
+            } label: {
+                VStack(spacing: 4) {
+                    Image(systemName: "square.and.arrow.up")
+                        .font(.system(size: 20))
+                    Text("Share")
+                        .font(.system(size: 11))
+                }
+                .frame(maxWidth: .infinity)
+            }
+            .disabled(selectedIDs.isEmpty)
+
+            Button(role: .destructive) {
+                guard !selectedIDs.isEmpty else { return }
+                showDeleteConfirm = true
+            } label: {
+                VStack(spacing: 4) {
+                    Image(systemName: "trash")
+                        .font(.system(size: 20))
+                    Text("Delete")
+                        .font(.system(size: 11))
+                }
+                .frame(maxWidth: .infinity)
+                .foregroundStyle(selectedIDs.isEmpty ? .gray : .red)
+            }
+            .disabled(selectedIDs.isEmpty)
+        }
+        .padding(.vertical, 10)
+        .background(.ultraThinMaterial)
+        .overlay(alignment: .top) {
+            Divider()
+        }
+    }
+
+    private func toggleSelection(_ id: UUID) {
+        withAnimation(.easeInOut(duration: 0.15)) {
+            if selectedIDs.contains(id) {
+                selectedIDs.remove(id)
+            } else {
+                selectedIDs.insert(id)
+            }
         }
     }
 }
@@ -82,14 +239,16 @@ struct RecordingsListView: View {
 
 struct RecordingCard: View {
     let recording: Recording
+    var isSelecting: Bool = false
     var onTap: () -> Void
     var onDelete: () -> Void
+    var onShare: () -> Void
 
     @Environment(\.colorScheme) private var colorScheme
     @State private var showDeleteConfirm = false
 
     var body: some View {
-        Button(action: onTap) {
+        Button(action: { if !isSelecting { onTap() } }) {
             HStack(spacing: 14) {
                 // Thumbnail / Icon
                 ZStack {
@@ -119,10 +278,11 @@ struct RecordingCard: View {
 
                 Spacer()
 
-                // Chevron
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 13, weight: .semibold))
-                    .foregroundStyle(.tertiary)
+                if !isSelecting {
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 13, weight: .semibold))
+                        .foregroundStyle(.tertiary)
+                }
             }
             .padding(14)
             .background(
@@ -136,18 +296,18 @@ struct RecordingCard: View {
         }
         .buttonStyle(.plain)
         .contextMenu {
-            Button(role: .destructive) {
-                showDeleteConfirm = true
-            } label: {
-                Label("Delete", systemImage: "trash")
-            }
+            if !isSelecting {
+                Button {
+                    onShare()
+                } label: {
+                    Label("Share", systemImage: "square.and.arrow.up")
+                }
 
-            ShareLink(
-                item: recording.csvURL,
-                subject: Text("IMU Data"),
-                message: Text("IMU recording data")
-            ) {
-                Label("Share CSV", systemImage: "square.and.arrow.up")
+                Button(role: .destructive) {
+                    showDeleteConfirm = true
+                } label: {
+                    Label("Delete", systemImage: "trash")
+                }
             }
         }
         .confirmationDialog("Delete this recording?", isPresented: $showDeleteConfirm) {
@@ -157,6 +317,18 @@ struct RecordingCard: View {
             Text("This will permanently delete the video and IMU data.")
         }
     }
+}
+
+// MARK: - UIActivityViewController wrapper
+
+struct ActivityView: UIViewControllerRepresentable {
+    let activityItems: [Any]
+
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
+    }
+
+    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
 }
 
 // MARK: - Video Player
