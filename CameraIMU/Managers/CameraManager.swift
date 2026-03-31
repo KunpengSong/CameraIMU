@@ -12,6 +12,9 @@ class CameraManager: NSObject, ObservableObject {
     @Published var currentCameraIndex: Int = 0
 
     private var currentVideoInput: AVCaptureDeviceInput?
+    // Local copies used on sessionQueue (not @Published, no main-thread dependency)
+    private var discoveredCameras: [AVCaptureDevice] = []
+    private var selectedCameraIndex: Int = 0
     var onRecordingFinished: ((URL?, Error?) -> Void)?
 
     var currentCameraName: String {
@@ -44,6 +47,11 @@ class CameraManager: NSObject, ObservableObject {
             $0.deviceType == .builtInWideAngleCamera && $0.position == .back
         } ?? 0
 
+        // Store locally for immediate use on sessionQueue
+        discoveredCameras = cameras
+        selectedCameraIndex = preferredIndex
+
+        // Also publish to main thread for UI
         DispatchQueue.main.async {
             self.availableCameras = cameras
             self.currentCameraIndex = preferredIndex
@@ -51,13 +59,13 @@ class CameraManager: NSObject, ObservableObject {
     }
 
     private func setupSession() {
-        guard !availableCameras.isEmpty else { return }
+        guard !discoveredCameras.isEmpty else { return }
 
         captureSession.beginConfiguration()
         captureSession.sessionPreset = .high
 
         // Video input
-        let device = availableCameras[currentCameraIndex]
+        let device = discoveredCameras[selectedCameraIndex]
         guard let videoInput = try? AVCaptureDeviceInput(device: device),
               captureSession.canAddInput(videoInput) else {
             captureSession.commitConfiguration()
