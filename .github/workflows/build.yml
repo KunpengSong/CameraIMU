@@ -1,0 +1,38 @@
+name: Build IPA
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode_16.2.app
+
+      - name: Build archive
+        run: |
+          xcodebuild archive \
+            -project CameraIMU.xcodeproj \
+            -scheme CameraIMU \
+            -destination 'generic/platform=iOS' \
+            -archivePath build/CameraIMU.xcarchive \
+            CODE_SIGN_IDENTITY="-" \
+            AD_HOC_CODE_SIGNING_ALLOWED=YES \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Create unsigned IPA
+        run: |
+          mkdir -p build/Payload
+          cp -r build/CameraIMU.xcarchive/Products/Applications/CameraIMU.app build/Payload/
+          cd build && zip -r CameraIMU.ipa Payload
+
+      - name: Upload IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: CameraIMU-unsigned
+          path: build/CameraIMU.ipa

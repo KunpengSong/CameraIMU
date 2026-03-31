@@ -1,0 +1,27 @@
+name: CameraIMU
+options:
+  bundleIdPrefix: com.example
+  deploymentTarget:
+    iOS: "16.0"
+  xcodeVersion: "15.0"
+
+targets:
+  CameraIMU:
+    type: application
+    platform: iOS
+    sources:
+      - CameraIMU
+    info:
+      path: CameraIMU/Info.plist
+      properties:
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        NSCameraUsageDescription: "This app needs camera access to record video."
+        NSMicrophoneUsageDescription: "This app needs microphone access to record audio with video."
+        NSMotionUsageDescription: "This app needs motion sensor access to record IMU data alongside video."
+    settings:
+      base:
+        SWIFT_VERSION: "5.9"
+        TARGETED_DEVICE_FAMILY: "1"
+        INFOPLIST_FILE: CameraIMU/Info.plist

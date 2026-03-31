@@ -1,0 +1,364 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0CFCE7FB2F748F17E20D44C7 /* MotionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6933A1FA0947D2ECF8B8F14 /* MotionManager.swift */; };
+		104EE623F30A88D3A1C8E030 /* RecordingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFCB1F95D4E44199A7790DDC /* RecordingViewModel.swift */; };
+		28598CDE5A928894B4853E29 /* CameraIMUApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ECF2FA6BE8174B5AB37D201 /* CameraIMUApp.swift */; };
+		2BF255ED84AD9A183A96EA32 /* TimestampSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7815DA85355C0C97014C486 /* TimestampSync.swift */; };
+		512A8412C0A5D1C473802C28 /* CameraPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74C9BD2C63A16841B436B7E7 /* CameraPreviewView.swift */; };
+		834EFDFA38E67C74D8295C07 /* IMUSample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 564398DD166C6267645A313B /* IMUSample.swift */; };
+		969106C7D3AD70E77A6A8ABC /* CameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41B3B6EBE4F98A71170E81E1 /* CameraManager.swift */; };
+		A1FFEFC5A191959756204A7F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0982E0E78B074FA22E040036 /* ContentView.swift */; };
+		AE6E62D284909EB942F26595 /* Recording.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67960916F110556B384083ED /* Recording.swift */; };
+		E5E2CF63C2EB029DD9942E37 /* FileManagerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A5A66FA4AE5FD802F4B245B /* FileManagerExtensions.swift */; };
+		EA1E50DB015D9EC4939DDD59 /* RecordingsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DF21F0E15B29D88EBF550 /* RecordingsListView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		0982E0E78B074FA22E040036 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		2D647DF16269A1470C71C2A4 /* CameraIMU.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = CameraIMU.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		41B3B6EBE4F98A71170E81E1 /* CameraManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraManager.swift; sourceTree = "<group>"; };
+		4ECF2FA6BE8174B5AB37D201 /* CameraIMUApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraIMUApp.swift; sourceTree = "<group>"; };
+		564398DD166C6267645A313B /* IMUSample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IMUSample.swift; sourceTree = "<group>"; };
+		67960916F110556B384083ED /* Recording.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recording.swift; sourceTree = "<group>"; };
+		74C9BD2C63A16841B436B7E7 /* CameraPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreviewView.swift; sourceTree = "<group>"; };
+		7A5A66FA4AE5FD802F4B245B /* FileManagerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerExtensions.swift; sourceTree = "<group>"; };
+		AFCB1F95D4E44199A7790DDC /* RecordingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingViewModel.swift; sourceTree = "<group>"; };
+		B48D2088564BBCAFCE56B4F2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		C6933A1FA0947D2ECF8B8F14 /* MotionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionManager.swift; sourceTree = "<group>"; };
+		D34DF21F0E15B29D88EBF550 /* RecordingsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingsListView.swift; sourceTree = "<group>"; };
+		F7815DA85355C0C97014C486 /* TimestampSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimestampSync.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		2A98E6D41502D154FD0BDBE8 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				41B3B6EBE4F98A71170E81E1 /* CameraManager.swift */,
+				C6933A1FA0947D2ECF8B8F14 /* MotionManager.swift */,
+			);
+			path = Managers;
+			sourceTree = "<group>";
+		};
+		6BD28C815D1A45152E8093DB /* CameraIMU */ = {
+			isa = PBXGroup;
+			children = (
+				4ECF2FA6BE8174B5AB37D201 /* CameraIMUApp.swift */,
+				B48D2088564BBCAFCE56B4F2 /* Info.plist */,
+				2A98E6D41502D154FD0BDBE8 /* Managers */,
+				BA9E79557E3FF93321848E7F /* Models */,
+				C2B889F2E0144CF729231F4C /* Utilities */,
+				991399844ADC77311FABB3FC /* ViewModels */,
+				AF6AF6B2E190271F68740EC7 /* Views */,
+			);
+			path = CameraIMU;
+			sourceTree = "<group>";
+		};
+		8D4768F5DEBE862B61956205 = {
+			isa = PBXGroup;
+			children = (
+				6BD28C815D1A45152E8093DB /* CameraIMU */,
+				A147AF15A8FDCACF8A7CB105 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		991399844ADC77311FABB3FC /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				AFCB1F95D4E44199A7790DDC /* RecordingViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		A147AF15A8FDCACF8A7CB105 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2D647DF16269A1470C71C2A4 /* CameraIMU.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		AF6AF6B2E190271F68740EC7 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				74C9BD2C63A16841B436B7E7 /* CameraPreviewView.swift */,
+				0982E0E78B074FA22E040036 /* ContentView.swift */,
+				D34DF21F0E15B29D88EBF550 /* RecordingsListView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		BA9E79557E3FF93321848E7F /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				564398DD166C6267645A313B /* IMUSample.swift */,
+				67960916F110556B384083ED /* Recording.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		C2B889F2E0144CF729231F4C /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				7A5A66FA4AE5FD802F4B245B /* FileManagerExtensions.swift */,
+				F7815DA85355C0C97014C486 /* TimestampSync.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		36615C60453F7D1BCD06301C /* CameraIMU */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C75CABC0E6158A229C16CB73 /* Build configuration list for PBXNativeTarget "CameraIMU" */;
+			buildPhases = (
+				BA0F77C305D50C7D3E07D4B3 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CameraIMU;
+			packageProductDependencies = (
+			);
+			productName = CameraIMU;
+			productReference = 2D647DF16269A1470C71C2A4 /* CameraIMU.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		0469773EE3A81516FF7D9341 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+				};
+			};
+			buildConfigurationList = 03444A049C8412EEB8CDE703 /* Build configuration list for PBXProject "CameraIMU" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 8D4768F5DEBE862B61956205;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = A147AF15A8FDCACF8A7CB105 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				36615C60453F7D1BCD06301C /* CameraIMU */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		BA0F77C305D50C7D3E07D4B3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				28598CDE5A928894B4853E29 /* CameraIMUApp.swift in Sources */,
+				969106C7D3AD70E77A6A8ABC /* CameraManager.swift in Sources */,
+				512A8412C0A5D1C473802C28 /* CameraPreviewView.swift in Sources */,
+				A1FFEFC5A191959756204A7F /* ContentView.swift in Sources */,
+				E5E2CF63C2EB029DD9942E37 /* FileManagerExtensions.swift in Sources */,
+				834EFDFA38E67C74D8295C07 /* IMUSample.swift in Sources */,
+				0CFCE7FB2F748F17E20D44C7 /* MotionManager.swift in Sources */,
+				AE6E62D284909EB942F26595 /* Recording.swift in Sources */,
+				104EE623F30A88D3A1C8E030 /* RecordingViewModel.swift in Sources */,
+				EA1E50DB015D9EC4939DDD59 /* RecordingsListView.swift in Sources */,
+				2BF255ED84AD9A183A96EA32 /* TimestampSync.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		48148088EA8193E0951C9E34 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		D18FB31956195E3798B2D7BA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = CameraIMU/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.CameraIMU;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		E07840461B99F359AD57EC20 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = CameraIMU/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.CameraIMU;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		E482766AB4CCA27B96BCFE7D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		03444A049C8412EEB8CDE703 /* Build configuration list for PBXProject "CameraIMU" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E482766AB4CCA27B96BCFE7D /* Debug */,
+				48148088EA8193E0951C9E34 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		C75CABC0E6158A229C16CB73 /* Build configuration list for PBXNativeTarget "CameraIMU" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D18FB31956195E3798B2D7BA /* Debug */,
+				E07840461B99F359AD57EC20 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 0469773EE3A81516FF7D9341 /* Project object */;
+}
