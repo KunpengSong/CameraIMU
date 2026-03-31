@@ -31,6 +31,10 @@ jobs:
       - name: Create unsigned IPA
         run: |
           APP_PATH=$(find build/DerivedData -name "CameraIMU.app" -type d | head -1)
+          # Inject app icons into the bundle
+          cp AppIconAssets/AppIcon60x60@2x.png "$APP_PATH/"
+          cp AppIconAssets/AppIcon60x60@3x.png "$APP_PATH/"
+          cp AppIconAssets/AppIcon1024x1024.png "$APP_PATH/"
           mkdir -p build/Payload
           cp -r "$APP_PATH" build/Payload/
           cd build && zip -r CameraIMU.ipa Payload
