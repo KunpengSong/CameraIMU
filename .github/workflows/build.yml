@@ -19,11 +19,12 @@ jobs:
           xcodebuild archive \
             -project CameraIMU.xcodeproj \
             -scheme CameraIMU \
-            -destination 'generic/platform=iOS' \
+            -sdk iphoneos \
             -archivePath build/CameraIMU.xcarchive \
             CODE_SIGN_IDENTITY="-" \
             AD_HOC_CODE_SIGNING_ALLOWED=YES \
-            CODE_SIGNING_ALLOWED=NO
+            CODE_SIGNING_ALLOWED=NO \
+            COMPILER_INDEX_STORE_ENABLE=NO
 
       - name: Create unsigned IPA
         run: |
