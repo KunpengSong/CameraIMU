@@ -14,22 +14,25 @@ jobs:
       - name: Select Xcode
         run: sudo xcode-select -s /Applications/Xcode_16.2.app
 
-      - name: Build archive
+      - name: Build
         run: |
-          xcodebuild archive \
+          xcodebuild build \
             -project CameraIMU.xcodeproj \
             -scheme CameraIMU \
             -sdk iphoneos \
-            -archivePath build/CameraIMU.xcarchive \
+            -configuration Release \
+            -derivedDataPath build/DerivedData \
             CODE_SIGN_IDENTITY="-" \
             AD_HOC_CODE_SIGNING_ALLOWED=YES \
             CODE_SIGNING_ALLOWED=NO \
-            COMPILER_INDEX_STORE_ENABLE=NO
+            COMPILER_INDEX_STORE_ENABLE=NO \
+            ENABLE_PREVIEWS=NO
 
       - name: Create unsigned IPA
         run: |
+          APP_PATH=$(find build/DerivedData -name "CameraIMU.app" -type d | head -1)
           mkdir -p build/Payload
-          cp -r build/CameraIMU.xcarchive/Products/Applications/CameraIMU.app build/Payload/
+          cp -r "$APP_PATH" build/Payload/
           cd build && zip -r CameraIMU.ipa Payload
 
       - name: Upload IPA
