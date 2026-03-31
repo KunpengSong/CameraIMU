@@ -25,3 +25,4 @@ targets:
         SWIFT_VERSION: "5.9"
         TARGETED_DEVICE_FAMILY: "1"
         INFOPLIST_FILE: CameraIMU/Info.plist
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon

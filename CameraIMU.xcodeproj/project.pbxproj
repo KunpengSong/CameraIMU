@@ -11,6 +11,7 @@
 		104EE623F30A88D3A1C8E030 /* RecordingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFCB1F95D4E44199A7790DDC /* RecordingViewModel.swift */; };
 		28598CDE5A928894B4853E29 /* CameraIMUApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ECF2FA6BE8174B5AB37D201 /* CameraIMUApp.swift */; };
 		2BF255ED84AD9A183A96EA32 /* TimestampSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7815DA85355C0C97014C486 /* TimestampSync.swift */; };
+		388FCBA1F0B7BE993E1C06CE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F6BB964C818D1F9DA7281B48 /* Assets.xcassets */; };
 		512A8412C0A5D1C473802C28 /* CameraPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74C9BD2C63A16841B436B7E7 /* CameraPreviewView.swift */; };
 		834EFDFA38E67C74D8295C07 /* IMUSample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 564398DD166C6267645A313B /* IMUSample.swift */; };
 		969106C7D3AD70E77A6A8ABC /* CameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41B3B6EBE4F98A71170E81E1 /* CameraManager.swift */; };
@@ -33,6 +34,7 @@
 		B48D2088564BBCAFCE56B4F2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C6933A1FA0947D2ECF8B8F14 /* MotionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionManager.swift; sourceTree = "<group>"; };
 		D34DF21F0E15B29D88EBF550 /* RecordingsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingsListView.swift; sourceTree = "<group>"; };
+		F6BB964C818D1F9DA7281B48 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F7815DA85355C0C97014C486 /* TimestampSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimestampSync.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -49,6 +51,7 @@
 		6BD28C815D1A45152E8093DB /* CameraIMU */ = {
 			isa = PBXGroup;
 			children = (
+				F6BB964C818D1F9DA7281B48 /* Assets.xcassets */,
 				4ECF2FA6BE8174B5AB37D201 /* CameraIMUApp.swift */,
 				B48D2088564BBCAFCE56B4F2 /* Info.plist */,
 				2A98E6D41502D154FD0BDBE8 /* Managers */,
@@ -120,6 +123,7 @@
 			buildConfigurationList = C75CABC0E6158A229C16CB73 /* Build configuration list for PBXNativeTarget "CameraIMU" */;
 			buildPhases = (
 				BA0F77C305D50C7D3E07D4B3 /* Sources */,
+				7C9CFA44341C77CDB7E09FB8 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -161,6 +165,17 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		7C9CFA44341C77CDB7E09FB8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				388FCBA1F0B7BE993E1C06CE /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		BA0F77C305D50C7D3E07D4B3 /* Sources */ = {

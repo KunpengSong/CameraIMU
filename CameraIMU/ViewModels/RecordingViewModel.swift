@@ -1,4 +1,5 @@
 import AVFoundation
+import Combine
 import SwiftUI
 
 @MainActor
@@ -16,6 +17,19 @@ class RecordingViewModel: ObservableObject {
     private var currentCSVURL: URL?
     private var currentAnchor: SyncAnchor?
     private var timer: Timer?
+    private var cancellables = Set<AnyCancellable>()
+
+    nonisolated init() {
+        // Forward child ObservableObject changes so SwiftUI re-renders
+        let cameraManager = cameraManager
+        let motionManager = motionManager
+        cameraManager.objectWillChange.sink { [weak self] _ in
+            Task { @MainActor in self?.objectWillChange.send() }
+        }.store(in: &cancellables)
+        motionManager.objectWillChange.sink { [weak self] _ in
+            Task { @MainActor in self?.objectWillChange.send() }
+        }.store(in: &cancellables)
+    }
 
     func setup() {
         cameraManager.configure()
