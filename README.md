@@ -6,7 +6,8 @@ An iOS app that simultaneously records video and IMU (Inertial Measurement Unit)
 
 ### Video Recording
 - Records video via `AVCaptureMovieFileOutput`, saved as `.mov` files
-- Supports all rear-facing cameras: **Wide (1x)**, **Ultra Wide (0.5x)**, and **Telephoto (3x)**
+- Supports all rear-facing cameras: **Ultra Wide (0.5x)**, **Wide (1x)**, and **Telephoto (3x)**
+- **Defaults to 0.5x ultra-wide** lens on launch (falls back to 1x wide if unavailable)
 - Camera lens can be switched before recording through a segmented picker at the bottom of the screen
 - Front-facing camera is intentionally excluded
 
@@ -53,9 +54,11 @@ timestamp,accel_x,accel_y,accel_z,gyro_x,gyro_y,gyro_z,mag_x,mag_y,mag_z
 
 ### Recordings List
 - Card-based layout with play icon, timestamp, video size, and CSV size
-- Long-press context menu: share CSV file or delete recording
-- Delete confirmation dialog to prevent accidental deletion
-- Swipe-friendly scroll view
+- **Multi-selection mode**: tap "Select" to enter selection mode, tap individual recordings to toggle selection
+- **Select All / Deselect All**: one-tap button at the top of the list when in selection mode
+- **Batch Share**: share selected recordings (both `.mov` video and `.csv` IMU files) via the system share sheet (AirDrop, Files, etc.)
+- **Batch Delete**: delete multiple recordings at once with confirmation dialog
+- Long-press context menu on individual recordings: share or delete
 - Light/dark mode follows system appearance automatically using semantic colors (`systemGroupedBackground`, `.primary`, `.secondary`, etc.)
 
 ### Video Player

@@ -4,7 +4,6 @@ struct ContentView: View {
     @StateObject private var viewModel = RecordingViewModel()
     @State private var showRecordings = false
     @State private var permissionsGranted = false
-    @State private var recordButtonScale: CGFloat = 1.0
 
     var body: some View {
         ZStack {
@@ -43,14 +42,8 @@ struct ContentView: View {
                         .padding(.bottom, 24)
                 }
 
-                // MARK: - Record Button
-                recordButton
-                    .padding(.bottom, 16)
-
-                // MARK: - Bottom Label
-                Text(viewModel.isRecording ? "Recording" : "Ready")
-                    .font(.system(size: 13, weight: .medium))
-                    .foregroundStyle(.white.opacity(0.7))
+                // MARK: - QR Scan Status
+                qrStatusIndicator
                     .padding(.bottom, 32)
             }
         }
@@ -174,37 +167,45 @@ struct ContentView: View {
         .background(.black.opacity(0.3), in: Capsule())
     }
 
-    // MARK: - Record Button
+    // MARK: - QR Status Indicator
 
-    private var recordButton: some View {
-        Button {
-            let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
-            impactFeedback.impactOccurred()
-            viewModel.toggleRecording()
-        } label: {
-            ZStack {
-                // Outer ring
-                Circle()
-                    .stroke(.white, lineWidth: 4)
-                    .frame(width: 76, height: 76)
-
-                // Inner shape
-                if viewModel.isRecording {
-                    RoundedRectangle(cornerRadius: 6, style: .continuous)
-                        .fill(.red)
-                        .frame(width: 30, height: 30)
-                } else {
+    private var qrStatusIndicator: some View {
+        VStack(spacing: 8) {
+            if viewModel.isRecording {
+                // Recording indicator
+                HStack(spacing: 8) {
                     Circle()
-                        .fill(.red)
-                        .frame(width: 64, height: 64)
+                        .fill(.white)
+                        .frame(width: 12, height: 12)
+                    Text("REC")
+                        .font(.system(size: 16, weight: .bold, design: .monospaced))
+                        .foregroundStyle(.white)
                 }
+                .padding(.horizontal, 20)
+                .padding(.vertical, 12)
+                .background(.red.opacity(0.8), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+
+                Text("Show STOP QR to end")
+                    .font(.system(size: 12))
+                    .foregroundStyle(.white.opacity(0.6))
+            } else {
+                // Waiting for QR
+                Image(systemName: "qrcode.viewfinder")
+                    .font(.system(size: 48, weight: .light))
+                    .foregroundStyle(.white.opacity(0.7))
+
+                Text("Show START QR to begin")
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundStyle(.white.opacity(0.7))
             }
-            .scaleEffect(recordButtonScale)
+
+            // Last QR event feedback
+            if let event = viewModel.lastQREvent {
+                Text(event)
+                    .font(.system(size: 11, design: .monospaced))
+                    .foregroundStyle(.green.opacity(0.8))
+            }
         }
-        .pressAction(
-            onPress: { withAnimation(.easeInOut(duration: 0.1)) { recordButtonScale = 0.9 } },
-            onRelease: { withAnimation(.spring(response: 0.3, dampingFraction: 0.5)) { recordButtonScale = 1.0 } }
-        )
     }
 
     // MARK: - Helpers
@@ -233,24 +234,3 @@ struct ContentView: View {
     }
 }
 
-// MARK: - Press Gesture Modifier
-
-struct PressActionModifier: ViewModifier {
-    var onPress: () -> Void
-    var onRelease: () -> Void
-
-    func body(content: Content) -> some View {
-        content
-            .simultaneousGesture(
-                DragGesture(minimumDistance: 0)
-                    .onChanged { _ in onPress() }
-                    .onEnded { _ in onRelease() }
-            )
-    }
-}
-
-extension View {
-    func pressAction(onPress: @escaping () -> Void, onRelease: @escaping () -> Void) -> some View {
-        modifier(PressActionModifier(onPress: onPress, onRelease: onRelease))
-    }
-}

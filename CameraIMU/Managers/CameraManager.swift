@@ -4,6 +4,7 @@ import Foundation
 class CameraManager: NSObject, ObservableObject {
     let captureSession = AVCaptureSession()
     private let movieOutput = AVCaptureMovieFileOutput()
+    private let metadataOutput = AVCaptureMetadataOutput()
     private let sessionQueue = DispatchQueue(label: "camera-session")
 
     @Published var isSessionRunning = false
@@ -16,6 +17,11 @@ class CameraManager: NSObject, ObservableObject {
     private var discoveredCameras: [AVCaptureDevice] = []
     private var selectedCameraIndex: Int = 0
     var onRecordingFinished: ((URL?, Error?) -> Void)?
+
+    // QR code detection
+    var onQRCodeDetected: ((String) -> Void)?
+    private var lastQRScanTime: TimeInterval = 0
+    private let qrScanInterval: TimeInterval = 0.5  // ~2fps
 
     var currentCameraName: String {
         guard !availableCameras.isEmpty else { return "No Camera" }
@@ -88,6 +94,15 @@ class CameraManager: NSObject, ObservableObject {
             captureSession.addOutput(movieOutput)
         }
 
+        // QR code metadata output
+        if captureSession.canAddOutput(metadataOutput) {
+            captureSession.addOutput(metadataOutput)
+            metadataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
+            if metadataOutput.availableMetadataObjectTypes.contains(.qr) {
+                metadataOutput.metadataObjectTypes = [.qr]
+            }
+        }
+
         captureSession.commitConfiguration()
         captureSession.startRunning()
 
@@ -142,6 +157,26 @@ class CameraManager: NSObject, ObservableObject {
     func stopRecording() {
         guard movieOutput.isRecording else { return }
         movieOutput.stopRecording()
+    }
+}
+
+extension CameraManager: AVCaptureMetadataOutputObjectsDelegate {
+    func metadataOutput(
+        _ output: AVCaptureMetadataOutput,
+        didOutput metadataObjects: [AVMetadataObject],
+        from connection: AVCaptureConnection
+    ) {
+        // Throttle to ~2fps
+        let now = CACurrentMediaTime()
+        guard now - lastQRScanTime >= qrScanInterval else { return }
+        lastQRScanTime = now
+
+        for object in metadataObjects {
+            guard let readable = object as? AVMetadataMachineReadableCodeObject,
+                  readable.type == .qr,
+                  let value = readable.stringValue else { continue }
+            onQRCodeDetected?(value)
+        }
     }
 }
 

@@ -12,6 +12,11 @@ class RecordingViewModel: ObservableObject {
     @Published var recordingDuration: TimeInterval = 0
     @Published var errorMessage: String?
     @Published var imuSampleCount: Int = 0
+    @Published var lastQREvent: String?
+
+    private static let qrPrefix = "CAMERAIMU:"
+    private var lastQRCommandTime: Date = .distantPast
+    private let qrCooldown: TimeInterval = 2.0
 
     private var currentVideoURL: URL?
     private var currentCSVURL: URL?
@@ -30,8 +35,38 @@ class RecordingViewModel: ObservableObject {
             .sink { [weak self] _ in self?.objectWillChange.send() }
             .store(in: &cancellables)
 
+        cameraManager.onQRCodeDetected = { [weak self] value in
+            self?.handleQRCode(value)
+        }
+
         cameraManager.configure()
         loadRecordings()
+    }
+
+    private func handleQRCode(_ value: String) {
+        guard value.hasPrefix(Self.qrPrefix) else { return }
+        let command = String(value.dropFirst(Self.qrPrefix.count)).uppercased()
+
+        // Cooldown to prevent rapid-fire
+        let now = Date()
+        guard now.timeIntervalSince(lastQRCommandTime) >= qrCooldown else { return }
+
+        switch command {
+        case "START":
+            guard !isRecording else { return }
+            lastQRCommandTime = now
+            lastQREvent = "QR: START detected"
+            TonePlayer.shared.playStartTone()
+            startRecording()
+        case "STOP":
+            guard isRecording else { return }
+            lastQRCommandTime = now
+            lastQREvent = "QR: STOP detected"
+            TonePlayer.shared.playStopTone()
+            stopRecording()
+        default:
+            break
+        }
     }
 
     func requestPermissions() async -> Bool {
