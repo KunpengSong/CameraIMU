@@ -6,27 +6,27 @@ import Foundation
 class TonePlayer {
     static let shared = TonePlayer()
 
-    private var startSoundID: SystemSoundID = 0
-    private var stopSoundID: SystemSoundID = 0
-
-    private init() {
-        // System sounds: 1057 = ascending tink, 1053 = descending tink
-        // These are built-in iOS system sound IDs
-        startSoundID = 1057
-        stopSoundID = 1053
-    }
+    private init() {}
 
     func configureAudioSession() {
         // No-op: system sounds don't need audio session configuration
     }
 
-    /// Ascending feedback sound for start
+    /// Triple-beep for start (3 short beeps)
     func playStartTone() {
-        AudioServicesPlaySystemSound(startSoundID)
+        // 1052 = standard system "tock" sound
+        AudioServicesPlayAlertSound(1052)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+            AudioServicesPlayAlertSound(1052)
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.30) {
+            AudioServicesPlayAlertSound(1052)
+        }
     }
 
-    /// Descending feedback sound for stop
+    /// Single long beep for stop
     func playStopTone() {
-        AudioServicesPlaySystemSound(stopSoundID)
+        // 1521 = haptic vibration + sound (Peek)
+        AudioServicesPlayAlertSound(1521)
     }
 }

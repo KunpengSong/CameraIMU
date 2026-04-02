@@ -20,10 +20,7 @@ class CameraManager: NSObject, ObservableObject {
 
     // QR code detection
     var onQRCodeDetected: ((String) -> Void)?
-    var onQRCodeLost: (() -> Void)?
     private var lastQRScanTime: TimeInterval = 0
-    private var lastQRDetectedTime: TimeInterval = 0
-    private var qrLostTimer: Timer?
     private let qrScanInterval: TimeInterval = 0.5  // ~2fps
 
     var currentCameraName: String {
@@ -179,14 +176,7 @@ extension CameraManager: AVCaptureMetadataOutputObjectsDelegate {
                   readable.type == .qr,
                   let value = readable.stringValue else { continue }
 
-            lastQRDetectedTime = now
             onQRCodeDetected?(value)
-
-            // Reset the "lost" timer — fire onQRCodeLost if no QR seen for 1.5s
-            qrLostTimer?.invalidate()
-            qrLostTimer = Timer.scheduledTimer(withTimeInterval: 1.5, repeats: false) { [weak self] _ in
-                self?.onQRCodeLost?()
-            }
         }
     }
 }
