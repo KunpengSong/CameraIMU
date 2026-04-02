@@ -249,8 +249,8 @@ struct RecordingBreathingBorder: View {
             RadialGradient(
                 colors: [
                     .clear,
-                    Color.red.opacity(pulse ? 0.25 : 0.05),
-                    Color.red.opacity(pulse ? 0.45 : 0.1)
+                    Color.red.opacity(pulse ? 0.5 : 0.1),
+                    Color.red.opacity(pulse ? 0.8 : 0.2)
                 ],
                 center: .center,
                 startRadius: UIScreen.main.bounds.width * 0.25,
@@ -259,13 +259,13 @@ struct RecordingBreathingBorder: View {
             // Edge border for extra emphasis
             Rectangle()
                 .fill(.clear)
-                .border(Color.red.opacity(pulse ? 0.7 : 0.15), width: pulse ? 4 : 2)
+                .border(Color.red.opacity(pulse ? 0.9 : 0.2), width: pulse ? 5 : 2)
         }
         .ignoresSafeArea()
         .allowsHitTesting(false)
         .onAppear {
             withAnimation(
-                .easeInOut(duration: 1.5)
+                .easeInOut(duration: 0.75)
                 .repeatForever(autoreverses: true)
             ) {
                 pulse = true
