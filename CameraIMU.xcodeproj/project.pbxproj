@@ -12,7 +12,9 @@
 		1EF043F1EB53C9C278FB7E74 /* start.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 31DEFD046C7AC896F1E6A407 /* start.mp3 */; };
 		238222094396A93717725D4E /* TonePlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B73FB4CEDE876A6B7FC243 /* TonePlayer.swift */; };
 		28598CDE5A928894B4853E29 /* CameraIMUApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ECF2FA6BE8174B5AB37D201 /* CameraIMUApp.swift */; };
+		2B3DE5569CC1C23B6B0F1D0C /* OSSConfig.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7A2155B486BE0403B7CA188B /* OSSConfig.plist */; };
 		2BF255ED84AD9A183A96EA32 /* TimestampSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7815DA85355C0C97014C486 /* TimestampSync.swift */; };
+		2F6ABBF3B98B481C21CE8851 /* OSSUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782B7E5F61A6BEC44E4E8453 /* OSSUploader.swift */; };
 		512A8412C0A5D1C473802C28 /* CameraPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74C9BD2C63A16841B436B7E7 /* CameraPreviewView.swift */; };
 		834EFDFA38E67C74D8295C07 /* IMUSample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 564398DD166C6267645A313B /* IMUSample.swift */; };
 		84C2147B5C57F013D7C5651A /* end.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D7A1DAE6A7111A30EB3A736A /* end.mp3 */; };
@@ -33,6 +35,8 @@
 		67960916F110556B384083ED /* Recording.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recording.swift; sourceTree = "<group>"; };
 		69B73FB4CEDE876A6B7FC243 /* TonePlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TonePlayer.swift; sourceTree = "<group>"; };
 		74C9BD2C63A16841B436B7E7 /* CameraPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreviewView.swift; sourceTree = "<group>"; };
+		782B7E5F61A6BEC44E4E8453 /* OSSUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSSUploader.swift; sourceTree = "<group>"; };
+		7A2155B486BE0403B7CA188B /* OSSConfig.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = OSSConfig.plist; sourceTree = "<group>"; };
 		7A5A66FA4AE5FD802F4B245B /* FileManagerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerExtensions.swift; sourceTree = "<group>"; };
 		AFCB1F95D4E44199A7790DDC /* RecordingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingViewModel.swift; sourceTree = "<group>"; };
 		B48D2088564BBCAFCE56B4F2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -56,6 +60,7 @@
 			isa = PBXGroup;
 			children = (
 				D7A1DAE6A7111A30EB3A736A /* end.mp3 */,
+				7A2155B486BE0403B7CA188B /* OSSConfig.plist */,
 				31DEFD046C7AC896F1E6A407 /* start.mp3 */,
 			);
 			path = Resources;
@@ -123,6 +128,7 @@
 			isa = PBXGroup;
 			children = (
 				7A5A66FA4AE5FD802F4B245B /* FileManagerExtensions.swift */,
+				782B7E5F61A6BEC44E4E8453 /* OSSUploader.swift */,
 				F7815DA85355C0C97014C486 /* TimestampSync.swift */,
 				69B73FB4CEDE876A6B7FC243 /* TonePlayer.swift */,
 			);
@@ -185,6 +191,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2B3DE5569CC1C23B6B0F1D0C /* OSSConfig.plist in Resources */,
 				84C2147B5C57F013D7C5651A /* end.mp3 in Resources */,
 				1EF043F1EB53C9C278FB7E74 /* start.mp3 in Resources */,
 			);
@@ -204,6 +211,7 @@
 				E5E2CF63C2EB029DD9942E37 /* FileManagerExtensions.swift in Sources */,
 				834EFDFA38E67C74D8295C07 /* IMUSample.swift in Sources */,
 				0CFCE7FB2F748F17E20D44C7 /* MotionManager.swift in Sources */,
+				2F6ABBF3B98B481C21CE8851 /* OSSUploader.swift in Sources */,
 				AE6E62D284909EB942F26595 /* Recording.swift in Sources */,
 				104EE623F30A88D3A1C8E030 /* RecordingViewModel.swift in Sources */,
 				EA1E50DB015D9EC4939DDD59 /* RecordingsListView.swift in Sources */,

@@ -1,0 +1,8 @@
+# Xcode
+*.xcodeproj/xcuserdata/
+*.xcworkspace/xcuserdata/
+DerivedData/
+build/
+
+# Secrets
+OSSConfig.plist

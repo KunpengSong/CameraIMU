@@ -47,6 +47,27 @@ struct ContentView: View {
                         .padding(.bottom, 24)
                 }
 
+                // MARK: - Upload Status
+                if let status = viewModel.uploadStatus {
+                    HStack(spacing: 8) {
+                        if viewModel.isUploading {
+                            ProgressView()
+                                .tint(.white)
+                                .scaleEffect(0.8)
+                        } else {
+                            Image(systemName: status.contains("complete") ? "checkmark.circle.fill" : "exclamationmark.triangle.fill")
+                                .foregroundStyle(status.contains("complete") ? .green : .orange)
+                        }
+                        Text(status)
+                            .font(.system(size: 12, weight: .medium))
+                            .foregroundStyle(.white)
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 8)
+                    .background(.ultraThinMaterial, in: Capsule())
+                    .padding(.bottom, 8)
+                }
+
                 // MARK: - QR Scan Status
                 qrStatusIndicator
                     .padding(.bottom, 32)

@@ -13,6 +13,8 @@ class RecordingViewModel: ObservableObject {
     @Published var errorMessage: String?
     @Published var imuSampleCount: Int = 0
     @Published var lastQREvent: String?
+    @Published var uploadStatus: String?
+    @Published var isUploading = false
 
     private static let qrPrefix = "CAMERAIMU:"
     private var lastQRCommandTime: Date = .distantPast
@@ -126,7 +128,7 @@ class RecordingViewModel: ObservableObject {
             writeCSV(samples: samples, anchor: anchor, to: csvURL)
         }
 
-        // Create recording entry
+        // Create recording entry and trigger upload
         if let videoURL = currentVideoURL, let csvURL = currentCSVURL {
             let recording = Recording(
                 date: Date(),
@@ -134,6 +136,9 @@ class RecordingViewModel: ObservableObject {
                 csvURL: csvURL
             )
             recordings.insert(recording, at: 0)
+
+            // Auto-upload in background
+            uploadRecording(videoURL: videoURL, csvURL: csvURL)
         }
 
         isRecording = false
@@ -174,6 +179,40 @@ class RecordingViewModel: ObservableObject {
         }
 
         recordings = loaded.sorted { $0.date > $1.date }
+    }
+
+    private func uploadRecording(videoURL: URL, csvURL: URL) {
+        let deviceName = UIDevice.current.name
+            .replacingOccurrences(of: " ", with: "_")
+            .replacingOccurrences(of: "'", with: "")
+
+        Task { @MainActor in
+            isUploading = true
+            uploadStatus = "Uploading..."
+            do {
+                try await OSSUploader.shared.uploadRecording(
+                    videoURL: videoURL,
+                    csvURL: csvURL,
+                    deviceName: deviceName,
+                    onProgress: { [weak self] status in
+                        Task { @MainActor in
+                            self?.uploadStatus = status
+                        }
+                    }
+                )
+                uploadStatus = "Upload complete"
+                // Clear status after 3s
+                Task { @MainActor in
+                    try? await Task.sleep(nanoseconds: 3_000_000_000)
+                    if self.uploadStatus == "Upload complete" {
+                        self.uploadStatus = nil
+                    }
+                }
+            } catch {
+                uploadStatus = "Upload failed: \(error.localizedDescription)"
+            }
+            isUploading = false
+        }
     }
 
     func deleteRecording(_ recording: Recording) {
