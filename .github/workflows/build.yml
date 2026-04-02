@@ -15,19 +15,13 @@ jobs:
         run: sudo xcode-select -s /Applications/Xcode_16.2.app
 
       - name: Create OSSConfig.plist
+        env:
+          OSS_AK: ${{ secrets.OSS_ACCESS_KEY }}
+          OSS_SK: ${{ secrets.OSS_SECRET_KEY }}
         run: |
-          cat > CameraIMU/Resources/OSSConfig.plist << 'PLIST'
-          <?xml version="1.0" encoding="UTF-8"?>
-          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-          <plist version="1.0">
-          <dict>
-            <key>AccessKey</key>
-            <string>${{ secrets.OSS_ACCESS_KEY }}</string>
-            <key>SecretKey</key>
-            <string>${{ secrets.OSS_SECRET_KEY }}</string>
-          </dict>
-          </plist>
-          PLIST
+          /usr/libexec/PlistBuddy -c "Add :AccessKey string $OSS_AK" CameraIMU/Resources/OSSConfig.plist
+          /usr/libexec/PlistBuddy -c "Add :SecretKey string $OSS_SK" CameraIMU/Resources/OSSConfig.plist
+          cat CameraIMU/Resources/OSSConfig.plist
 
       - name: Build
         run: |

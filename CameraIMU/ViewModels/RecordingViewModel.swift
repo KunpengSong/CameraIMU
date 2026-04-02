@@ -179,6 +179,11 @@ class RecordingViewModel: ObservableObject {
     }
 
     func uploadRecordings(_ items: [Recording]) {
+        guard OSSUploader.shared.isConfigured else {
+            uploadStatus = "Error: OSS credentials not found"
+            return
+        }
+
         let deviceName = UIDevice.current.name
             .replacingOccurrences(of: " ", with: "_")
             .replacingOccurrences(of: "'", with: "")

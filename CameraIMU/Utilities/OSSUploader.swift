@@ -18,6 +18,8 @@ class OSSUploader: NSObject {
         return URLSession(configuration: config, delegate: self, delegateQueue: nil)
     }()
 
+    var isConfigured: Bool { !accessKey.isEmpty && !secretKey.isEmpty }
+
     // Progress tracking
     private var activeProgress: ((Int64, Int64) -> Void)?
     private var activeCompletion: ((Result<Int, Error>) -> Void)?
