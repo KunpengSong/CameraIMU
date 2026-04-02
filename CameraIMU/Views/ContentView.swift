@@ -4,6 +4,7 @@ struct ContentView: View {
     @StateObject private var viewModel = RecordingViewModel()
     @State private var showRecordings = false
     @State private var permissionsGranted = false
+    @State private var breatheIn = false
 
     var body: some View {
         ZStack {
@@ -20,6 +21,23 @@ struct ContentView: View {
                     .frame(height: 200)
             }
             .ignoresSafeArea()
+
+            // MARK: - Breathing border when recording
+            if viewModel.isRecording {
+                RoundedRectangle(cornerRadius: 0)
+                    .stroke(
+                        Color.red.opacity(breatheIn ? 0.6 : 0.15),
+                        lineWidth: breatheIn ? 6 : 3
+                    )
+                    .ignoresSafeArea()
+                    .allowsHitTesting(false)
+                    .animation(
+                        .easeInOut(duration: 1.5).repeatForever(autoreverses: true),
+                        value: breatheIn
+                    )
+                    .onAppear { breatheIn = true }
+                    .onDisappear { breatheIn = false }
+            }
 
             VStack(spacing: 0) {
                 // MARK: - Top Status Bar
@@ -74,7 +92,7 @@ struct ContentView: View {
                     Circle()
                         .fill(.red)
                         .frame(width: 8, height: 8)
-                        .shadow(color: .red.opacity(0.6), radius: 4)
+                        .shadow(color: .red.opacity(breatheIn ? 0.8 : 0.3), radius: breatheIn ? 6 : 2)
                     Text(formatDuration(viewModel.recordingDuration))
                         .font(.system(size: 15, weight: .semibold, design: .monospaced))
                         .foregroundStyle(.white)
@@ -183,7 +201,10 @@ struct ContentView: View {
                 }
                 .padding(.horizontal, 20)
                 .padding(.vertical, 12)
-                .background(.red.opacity(0.8), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                .background(
+                    Color.red.opacity(breatheIn ? 0.8 : 0.5),
+                    in: RoundedRectangle(cornerRadius: 16, style: .continuous)
+                )
 
                 Text("Show STOP QR to end")
                     .font(.system(size: 12))
