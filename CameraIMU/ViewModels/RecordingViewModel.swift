@@ -20,6 +20,7 @@ class RecordingViewModel: ObservableObject {
 
     // Debug: progressive test steps for START QR
     private var testStep = 0
+    private var testStepReady = true  // must look away from QR between steps
 
     private var currentVideoURL: URL?
     private var currentCSVURL: URL?
@@ -43,6 +44,15 @@ class RecordingViewModel: ObservableObject {
                 self?.handleQRCode(value)
             }
         }
+        // Track when QR disappears (no detection for 1.5s = "looked away")
+        cameraManager.onQRCodeLost = { [weak self] in
+            Task { @MainActor in
+                self?.testStepReady = true
+                if let step = self?.testStep, step > 0, step < 5 {
+                    self?.lastQREvent = "Step \(step) done. Show QR again for step \(step + 1)"
+                }
+            }
+        }
 
         // Pre-configure audio session so tone playback doesn't interrupt camera
         TonePlayer.shared.configureAudioSession()
@@ -62,7 +72,9 @@ class RecordingViewModel: ObservableObject {
         switch command {
         case "START":
             guard !isRecording else { return }
+            guard testStepReady else { return }  // must look away between steps
             lastQRCommandTime = now
+            testStepReady = false
             testStep += 1
 
             switch testStep {
