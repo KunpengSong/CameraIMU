@@ -24,18 +24,6 @@
 	<string>This app needs microphone access to record audio with video.</string>
 	<key>NSMotionUsageDescription</key>
 	<string>This app needs motion sensor access to record IMU data alongside video.</string>
-	<key>CFBundleIcons</key>
-	<dict>
-		<key>CFBundlePrimaryIcon</key>
-		<dict>
-			<key>CFBundleIconFiles</key>
-			<array>
-				<string>AppIcon60x60</string>
-			</array>
-			<key>CFBundleIconName</key>
-			<string>AppIcon</string>
-		</dict>
-	</dict>
 	<key>UILaunchScreen</key>
 	<dict/>
 	<key>UISupportedInterfaceOrientations</key>
