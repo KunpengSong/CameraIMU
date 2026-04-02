@@ -4,7 +4,6 @@ struct ContentView: View {
     @StateObject private var viewModel = RecordingViewModel()
     @State private var showRecordings = false
     @State private var permissionsGranted = false
-    @State private var breatheIn = false
 
     var body: some View {
         ZStack {
@@ -24,19 +23,7 @@ struct ContentView: View {
 
             // MARK: - Breathing border when recording
             if viewModel.isRecording {
-                RoundedRectangle(cornerRadius: 0)
-                    .stroke(
-                        Color.red.opacity(breatheIn ? 0.6 : 0.15),
-                        lineWidth: breatheIn ? 6 : 3
-                    )
-                    .ignoresSafeArea()
-                    .allowsHitTesting(false)
-                    .animation(
-                        .easeInOut(duration: 1.5).repeatForever(autoreverses: true),
-                        value: breatheIn
-                    )
-                    .onAppear { breatheIn = true }
-                    .onDisappear { breatheIn = false }
+                RecordingBreathingBorder()
             }
 
             VStack(spacing: 0) {
@@ -92,7 +79,7 @@ struct ContentView: View {
                     Circle()
                         .fill(.red)
                         .frame(width: 8, height: 8)
-                        .shadow(color: .red.opacity(breatheIn ? 0.8 : 0.3), radius: breatheIn ? 6 : 2)
+                        .shadow(color: .red.opacity(0.6), radius: 4)
                     Text(formatDuration(viewModel.recordingDuration))
                         .font(.system(size: 15, weight: .semibold, design: .monospaced))
                         .foregroundStyle(.white)
@@ -201,10 +188,7 @@ struct ContentView: View {
                 }
                 .padding(.horizontal, 20)
                 .padding(.vertical, 12)
-                .background(
-                    Color.red.opacity(breatheIn ? 0.8 : 0.5),
-                    in: RoundedRectangle(cornerRadius: 16, style: .continuous)
-                )
+                .background(.red.opacity(0.8), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
 
                 Text("Show STOP QR to end")
                     .font(.system(size: 12))
@@ -252,6 +236,27 @@ struct ContentView: View {
         let seconds = Int(duration) % 60
         let tenths = Int(duration * 10) % 10
         return String(format: "%02d:%02d.%d", minutes, seconds, tenths)
+    }
+}
+
+/// A self-contained breathing red border overlay for recording state.
+struct RecordingBreathingBorder: View {
+    @State private var pulse = false
+
+    var body: some View {
+        Rectangle()
+            .fill(.clear)
+            .border(Color.red.opacity(pulse ? 0.6 : 0.1), width: pulse ? 6 : 2)
+            .ignoresSafeArea()
+            .allowsHitTesting(false)
+            .onAppear {
+                withAnimation(
+                    .easeInOut(duration: 1.5)
+                    .repeatForever(autoreverses: true)
+                ) {
+                    pulse = true
+                }
+            }
     }
 }
 
