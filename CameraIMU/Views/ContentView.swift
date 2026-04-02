@@ -239,24 +239,38 @@ struct ContentView: View {
     }
 }
 
-/// A self-contained breathing red border overlay for recording state.
+/// A self-contained breathing red vignette overlay for recording state.
 struct RecordingBreathingBorder: View {
     @State private var pulse = false
 
     var body: some View {
-        Rectangle()
-            .fill(.clear)
-            .border(Color.red.opacity(pulse ? 0.6 : 0.1), width: pulse ? 6 : 2)
-            .ignoresSafeArea()
-            .allowsHitTesting(false)
-            .onAppear {
-                withAnimation(
-                    .easeInOut(duration: 1.5)
-                    .repeatForever(autoreverses: true)
-                ) {
-                    pulse = true
-                }
+        ZStack {
+            // Full-screen radial gradient vignette
+            RadialGradient(
+                colors: [
+                    .clear,
+                    Color.red.opacity(pulse ? 0.25 : 0.05),
+                    Color.red.opacity(pulse ? 0.45 : 0.1)
+                ],
+                center: .center,
+                startRadius: UIScreen.main.bounds.width * 0.25,
+                endRadius: UIScreen.main.bounds.width * 0.85
+            )
+            // Edge border for extra emphasis
+            Rectangle()
+                .fill(.clear)
+                .border(Color.red.opacity(pulse ? 0.7 : 0.15), width: pulse ? 4 : 2)
+        }
+        .ignoresSafeArea()
+        .allowsHitTesting(false)
+        .onAppear {
+            withAnimation(
+                .easeInOut(duration: 1.5)
+                .repeatForever(autoreverses: true)
+            ) {
+                pulse = true
             }
+        }
     }
 }
 
