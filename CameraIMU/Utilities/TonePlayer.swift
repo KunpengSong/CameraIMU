@@ -10,9 +10,25 @@ class TonePlayer {
     private let sampleRate: Double = 44100
     private let duration: Double = 0.3  // total tone duration in seconds
 
+    private var isConfigured = false
+
     private init() {
         engine.attach(playerNode)
         engine.connect(playerNode, to: engine.mainMixerNode, format: nil)
+    }
+
+    /// Call once at app startup to configure audio session for tone playback
+    /// alongside camera recording.
+    func configureAudioSession() {
+        guard !isConfigured else { return }
+        do {
+            let session = AVAudioSession.sharedInstance()
+            try session.setCategory(.playAndRecord, options: [.defaultToSpeaker, .mixWithOthers])
+            try session.setActive(true)
+            isConfigured = true
+        } catch {
+            print("TonePlayer audio session config error: \(error)")
+        }
     }
 
     /// Ascending two-note tone: C5 → E5
@@ -54,10 +70,8 @@ class TonePlayer {
         }
 
         do {
-            // Configure audio session to mix with recording
-            let session = AVAudioSession.sharedInstance()
-            try session.setCategory(.playAndRecord, options: [.defaultToSpeaker, .mixWithOthers])
-            try session.setActive(true)
+            // Ensure audio session is configured
+            configureAudioSession()
 
             if !engine.isRunning {
                 try engine.start()

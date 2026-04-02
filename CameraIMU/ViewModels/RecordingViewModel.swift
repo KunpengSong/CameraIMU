@@ -36,8 +36,13 @@ class RecordingViewModel: ObservableObject {
             .store(in: &cancellables)
 
         cameraManager.onQRCodeDetected = { [weak self] value in
-            self?.handleQRCode(value)
+            Task { @MainActor in
+                self?.handleQRCode(value)
+            }
         }
+
+        // Pre-configure audio session so tone playback doesn't interrupt camera
+        TonePlayer.shared.configureAudioSession()
 
         cameraManager.configure()
         loadRecordings()
@@ -57,13 +62,18 @@ class RecordingViewModel: ObservableObject {
             lastQRCommandTime = now
             lastQREvent = "QR: START detected"
             TonePlayer.shared.playStartTone()
-            startRecording()
+            // Delay recording start to let audio engine settle
+            Task { @MainActor in
+                try? await Task.sleep(nanoseconds: 400_000_000) // 0.4s
+                guard !self.isRecording else { return }
+                self.startRecording()
+            }
         case "STOP":
             guard isRecording else { return }
             lastQRCommandTime = now
             lastQREvent = "QR: STOP detected"
-            TonePlayer.shared.playStopTone()
             stopRecording()
+            TonePlayer.shared.playStopTone()
         default:
             break
         }
