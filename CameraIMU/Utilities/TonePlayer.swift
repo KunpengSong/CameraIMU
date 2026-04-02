@@ -26,7 +26,7 @@ class TonePlayer {
     }
 
     private func playTwoNoteTone(freq1: Double, freq2: Double) {
-        let format = AVAudioFormat(standardFormatID: kAudioFormatLinearPCM,
+        let format = AVAudioFormat(commonFormat: .pcmFormatFloat32,
                                    sampleRate: sampleRate,
                                    channels: 1,
                                    interleaved: false)!
