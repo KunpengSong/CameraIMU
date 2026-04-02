@@ -128,7 +128,7 @@ class RecordingViewModel: ObservableObject {
             writeCSV(samples: samples, anchor: anchor, to: csvURL)
         }
 
-        // Create recording entry and trigger upload
+        // Create recording entry
         if let videoURL = currentVideoURL, let csvURL = currentCSVURL {
             let recording = Recording(
                 date: Date(),
@@ -136,9 +136,6 @@ class RecordingViewModel: ObservableObject {
                 csvURL: csvURL
             )
             recordings.insert(recording, at: 0)
-
-            // Auto-upload in background
-            uploadRecording(videoURL: videoURL, csvURL: csvURL)
         }
 
         isRecording = false
@@ -181,37 +178,38 @@ class RecordingViewModel: ObservableObject {
         recordings = loaded.sorted { $0.date > $1.date }
     }
 
-    private func uploadRecording(videoURL: URL, csvURL: URL) {
+    func uploadRecordings(_ items: [Recording]) {
         let deviceName = UIDevice.current.name
             .replacingOccurrences(of: " ", with: "_")
             .replacingOccurrences(of: "'", with: "")
 
         Task { @MainActor in
             isUploading = true
-            uploadStatus = "Uploading..."
-            do {
-                try await OSSUploader.shared.uploadRecording(
-                    videoURL: videoURL,
-                    csvURL: csvURL,
-                    deviceName: deviceName,
-                    onProgress: { [weak self] status in
-                        Task { @MainActor in
-                            self?.uploadStatus = status
+            let total = items.count
+            for (i, recording) in items.enumerated() {
+                do {
+                    uploadStatus = "[\(i + 1)/\(total)] Uploading video..."
+                    try await OSSUploader.shared.uploadRecording(
+                        videoURL: recording.videoURL,
+                        csvURL: recording.csvURL,
+                        deviceName: deviceName,
+                        onProgress: { [weak self] status in
+                            Task { @MainActor in
+                                self?.uploadStatus = "[\(i + 1)/\(total)] \(status)"
+                            }
                         }
-                    }
-                )
-                uploadStatus = "Upload complete"
-                // Clear status after 3s
-                Task { @MainActor in
-                    try? await Task.sleep(nanoseconds: 3_000_000_000)
-                    if self.uploadStatus == "Upload complete" {
-                        self.uploadStatus = nil
-                    }
+                    )
+                } catch {
+                    uploadStatus = "[\(i + 1)/\(total)] Failed: \(error.localizedDescription)"
+                    try? await Task.sleep(nanoseconds: 2_000_000_000)
                 }
-            } catch {
-                uploadStatus = "Upload failed: \(error.localizedDescription)"
             }
+            uploadStatus = "All \(total) recording(s) uploaded"
             isUploading = false
+            try? await Task.sleep(nanoseconds: 3_000_000_000)
+            if !self.isUploading {
+                self.uploadStatus = nil
+            }
         }
     }
 

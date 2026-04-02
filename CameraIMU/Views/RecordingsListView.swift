@@ -27,10 +27,32 @@ struct RecordingsListView: View {
                 Color(.systemGroupedBackground)
                     .ignoresSafeArea()
 
-                if viewModel.recordings.isEmpty {
-                    emptyState
-                } else {
-                    recordingsList
+                VStack(spacing: 0) {
+                    // Upload progress banner
+                    if let status = viewModel.uploadStatus {
+                        HStack(spacing: 10) {
+                            if viewModel.isUploading {
+                                ProgressView()
+                                    .scaleEffect(0.8)
+                            } else {
+                                Image(systemName: status.contains("uploaded") ? "checkmark.circle.fill" : "exclamationmark.triangle.fill")
+                                    .foregroundStyle(status.contains("uploaded") ? .green : .orange)
+                            }
+                            Text(status)
+                                .font(.system(size: 13, weight: .medium))
+                            Spacer()
+                        }
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 10)
+                        .background(Color(.systemBackground).opacity(0.95))
+                        .transition(.move(edge: .top).combined(with: .opacity))
+                    }
+
+                    if viewModel.recordings.isEmpty {
+                        emptyState
+                    } else {
+                        recordingsList
+                    }
                 }
             }
             .navigationTitle("Recordings")
@@ -164,6 +186,8 @@ struct RecordingsListView: View {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                                 showShareSheet = true
                             }
+                        } onUpload: {
+                            viewModel.uploadRecordings([recording])
                         }
                     }
                     .contentShape(Rectangle())
@@ -188,6 +212,21 @@ struct RecordingsListView: View {
 
     private var selectionToolbar: some View {
         HStack(spacing: 0) {
+            Button {
+                guard !selectedIDs.isEmpty else { return }
+                let items = viewModel.recordings.filter { selectedIDs.contains($0.id) }
+                viewModel.uploadRecordings(items)
+            } label: {
+                VStack(spacing: 4) {
+                    Image(systemName: "icloud.and.arrow.up")
+                        .font(.system(size: 20))
+                    Text("Upload")
+                        .font(.system(size: 11))
+                }
+                .frame(maxWidth: .infinity)
+            }
+            .disabled(selectedIDs.isEmpty || viewModel.isUploading)
+
             Button {
                 guard !selectedIDs.isEmpty else { return }
                 showShareSheet = true
@@ -243,6 +282,7 @@ struct RecordingCard: View {
     var onTap: () -> Void
     var onDelete: () -> Void
     var onShare: () -> Void
+    var onUpload: (() -> Void)?
 
     @Environment(\.colorScheme) private var colorScheme
     @State private var showDeleteConfirm = false
@@ -297,6 +337,14 @@ struct RecordingCard: View {
         .buttonStyle(.plain)
         .contextMenu {
             if !isSelecting {
+                if let onUpload = onUpload {
+                    Button {
+                        onUpload()
+                    } label: {
+                        Label("Upload to Cloud", systemImage: "icloud.and.arrow.up")
+                    }
+                }
+
                 Button {
                     onShare()
                 } label: {
